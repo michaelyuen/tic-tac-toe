@@ -19,6 +19,8 @@ Not required features, but nice to have.
 - Optimize algorithm checking for winner
 - Option of two players
 
-#### Things to keep in mind
+---
+
+### Things to keep in mind
 - While traditionally 3x3, the logic should be able to accomodate any grid of N
 - Version 2's algorith should be able to support something similar like Connect 4
