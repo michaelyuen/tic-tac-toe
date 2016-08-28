@@ -10,15 +10,49 @@
 
 		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
 		<link rel="stylesheet" href="/lib/css/angular-material/angular-material.min.css"/>
-		<!-- <link rel="stylesheet" href="assets/app.css"/> -->
+		<link rel="stylesheet" href="/app.css"/>
 	</head>
-	<body ng-app="tic-tac-toe" layout="column" ng-controller="TicTacToeController as vm" ng-cloak>
+	<body ng-app="tic-tac-toe-demo" layout="column" ng-controller="TicTacToeController as vm" ng-cloak>
 
-		<md-toolbar layout-align="center center" class="md-tall">
+		<md-toolbar layout="row" layout-align="center center" class="md-tall">
 			<h1>Tic-tac-toe</h1>
+			<div ng-if="vm.gameOver">Winner!</div>
 		</md-toolbar>
 
-		<md-content>
+		<md-content layout="row" layout-align="center center" style="height: 80%;">
+
+			<md-grid-list style="height: 400px; width: 400px;" md-cols="3" md-gutter=".5em" md-row-height="fit" md-colors="{background: 'red-A100'}" class="grid-list">
+
+				<md-grid-tile md-colspan="3" ng-repeat="row in vm.grid">
+
+					<md-grid-list md-cols="3" md-gutter=".5em" md-row-height="fit" layout-fill>
+
+						<md-grid-tile ng-repeat="col in row" style="background: white;">
+
+							<div layout-fill ng-if="!col.selected" ng-click="vm.select( col.x, col.y )"></div>
+							<div layout-align="center center" ng-if="col.selected">
+								<h1>{{ vm.players[ col.playerId ].symbol }}</h1>
+							</div>
+
+						</md-grid-tile>
+
+					</md-grid-list>
+
+				</md-grid-tile>
+
+			</md-grid-list>
+
+		</md-content>
+
+		<md-content layout="row" layout-align="center center" style="height: 20%;">
+
+			<div flex="15" layout="row" layout-align="space-around center" ng-repeat="player in vm.players">
+
+				<h2>{{ player.name }} ({{ player.symbol }})</h2>
+				<div>{{ player.wins }}</div>
+
+			</div>
+
 		</md-content>
 
 		<!-- Libraries -->
@@ -39,8 +73,10 @@
 
 		<!-- App -->
 		<script src="/app.js"></script>
-		<script src="/app-config.js"></script>
 		<script src="/app-controller.js"></script>
+
+		<script src="/components/tic-tac-toe/tic-tac-toe.js"></script>
+		<script src="/components/tic-tac-toe/tic-tac-toe-factory.js"></script>
 
 		<!-- Result of grunt 'uglify-all' task
 			Minifies and concat all js

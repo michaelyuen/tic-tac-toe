@@ -1,7 +1,7 @@
 (function(){
 	'use strict';
 	angular
-		.module('tic-tac-toe')
+		.module('tic-tac-toe-demo')
 		.controller('TicTacToeController', TicTacToeController);
 
 	/**
@@ -11,84 +11,40 @@
 	 * @param avatarsService
 	 * @constructor
 	 */
-	function TicTacToeController(){
+	function TicTacToeController( TicTacToeFactory ){
 
-		var vm = this;
+		var vm      = this;
+		vm.gameOver = false;
+		vm.players  = undefined;
+		vm.select   = select;
+
+		var n = 3;
+		var TicTacToe;
 
 		activate();
 
 		function activate(){
 
+			TicTacToe  = new TicTacToeFactory( n );
+			vm.players = TicTacToe.players;
+			vm.grid    = TicTacToe.grid;
 		};
 
-		// self.selected     = null;
-		// self.users        = [ ];
-		// self.selectUser   = selectUser;
-		// self.toggleList   = toggleUsersList;
-		// self.makeContact  = makeContact;
+		function select( x, y ){
 
-		// Load all registered users
+			TicTacToe.select( x, y );
 
-		// userService
-		// 			.loadAllUsers()
-		// 			.then( function( users ) {
-		// 				self.users    = [].concat(users);
-		// 				self.selected = users[0];
-		// 			});
+			var weHaveAWinner = TicTacToe.checkForWin( x, y );
 
-		// *********************************
-		// Internal methods
-		// *********************************
+			if( weHaveAWinner ){
 
-		/**
-		 * Hide or Show the 'left' sideNav area
-		 */
-		function toggleUsersList() {
-			$mdSidenav('left').toggle();
-		}
+				TicTacToe.updateWins();
+				vm.gameOver = true;
+			}
+			else{
 
-		/**
-		 * Select the current avatars
-		 * @param menuId
-		 */
-		function selectUser ( user ) {
-			self.selected = angular.isNumber(user) ? $scope.users[user] : user;
-		}
-
-		/**
-		 * Show the Contact view in the bottom sheet
-		 */
-		function makeContact(selectedUser) {
-
-				$mdBottomSheet.show({
-					controllerAs  : "vm",
-					templateUrl   : './src/users/view/contactSheet.html',
-					controller    : [ '$mdBottomSheet', ContactSheetController],
-					parent        : angular.element(document.getElementById('content'))
-				}).then(function(clickedItem) {
-					$log.debug( clickedItem.name + ' clicked!');
-				});
-
-				/**
-				 * User ContactSheet controller
-				 */
-				function ContactSheetController( $mdBottomSheet ) {
-					this.user = selectedUser;
-					this.items = [
-						{ name: 'Phone'       , icon: 'phone'       , icon_url: 'assets/svg/phone.svg'},
-						{ name: 'Twitter'     , icon: 'twitter'     , icon_url: 'assets/svg/twitter.svg'},
-						{ name: 'Google+'     , icon: 'google_plus' , icon_url: 'assets/svg/google_plus.svg'},
-						{ name: 'Hangout'     , icon: 'hangouts'    , icon_url: 'assets/svg/hangouts.svg'}
-					];
-					this.contactUser = function(action) {
-						// The actually contact process has not been implemented...
-						// so just hide the bottomSheet
-
-						$mdBottomSheet.hide(action);
-					};
-				}
-		}
-
-	}
-
+				TicTacToe.nextTurn();
+			}
+		};
+	};
 })();
