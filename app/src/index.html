@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Tic-tac-toe</title>
+
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1" />
+
+		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+		<link rel="stylesheet" href="/lib/css/angular-material/angular-material.min.css"/>
+		<!-- <link rel="stylesheet" href="assets/app.css"/> -->
+	</head>
+	<body ng-app="tic-tac-toe" layout="column" ng-controller="TicTacToeController as vm" ng-cloak>
+
+		<md-toolbar layout-align="center center" class="md-tall">
+			<h1>Tic-tac-toe</h1>
+		</md-toolbar>
+
+		<md-content>
+		</md-content>
+
+		<!-- Libraries -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js"></script>
+		<script>
+			if( !window.angular ){
+				document.write('<script src="/assets/js/angular/angular.min.js"><\/script>');
+				document.write('<script src="/assets/js/angular-animate/angular-animate.min.js"><\/script>');
+				document.write('<script src="/assets/js/angular-aria/angular-aria.min.js"><\/script>');
+				document.write('<script src="/assets/js/angular-material/angular-material.min.js"><\/script>');
+				document.write('<script src="/assets/js/angular-ui-router/angular-ui-router.min.js"><\/script>');
+			}
+		</script>
+
+		<!-- App -->
+		<script src="/app.js"></script>
+		<script src="/app-config.js"></script>
+		<script src="/app-controller.js"></script>
+
+		<!-- Result of grunt 'uglify-all' task
+			Minifies and concat all js
+			app.js, components, and views, libraries -->
+		<!-- <script src="/assets/js/uglify-all/all.min.js"></script> -->
+	</body>
+</html>

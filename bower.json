@@ -1,0 +1,22 @@
+{
+  "name": "tic-tac-toe",
+  "version": "0.1.0",
+  "description": "A simple Tic-tac-toe app built with Angular",
+  "license": "MIT",
+  "authors": [
+    "Michael Yuen <michaelclaytonyuen@gmail.com>"
+  ],
+  "private": false,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.5.8",
+    "angular-material": "1.1.0",
+    "angular-ui-router": "~0.3.0"
+  }
+}
