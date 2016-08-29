@@ -1,6 +1,6 @@
 {
   "name": "tic-tac-toe",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "A simple Tic-tac-toe app built with Angular",
   "license": "MIT",
   "authors": [
