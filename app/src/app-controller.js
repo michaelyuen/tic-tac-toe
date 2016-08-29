@@ -16,10 +16,17 @@
 		var vm      = this;
 		vm.gameOver = false;
 		vm.players  = undefined;
-		vm.select   = select;
+		vm.status   = {
+			gameOver: false,
+			message: undefined
+		};
+		vm.select    = select;
+		vm.playAgain = playAgain;
 
 		var n = 3;
-		var TicTacToe;
+		var TicTacToe = undefined,
+			turn = undefined,
+			activePlayer = undefined;
 
 		activate();
 
@@ -32,19 +39,40 @@
 
 		function select( x, y ){
 
+			TicTacToe.activePlayer = TicTacToe.turn % 2;
+
+			// Selection
 			TicTacToe.select( x, y );
 
-			var weHaveAWinner = TicTacToe.checkForWin( x, y );
 
-			if( weHaveAWinner ){
+			if( TicTacToe.isWinner( x, y ) ){
 
 				TicTacToe.updateWins();
-				vm.gameOver = true;
+				vm.status.gameOver = true;
+				vm.status.message  = TicTacToe.gameOverMessage;
+			}
+			else if( TicTacToe.isDraw() ){
+
+				vm.status.gameOver = true;
+				vm.status.message  = TicTacToe.gameOverMessage;
 			}
 			else{
 
-				TicTacToe.nextTurn();
+				TicTacToe.turn++;
+
+				if( TicTacToe.turn % 2 === 1 ){
+
+					TicTacToe.computerTurn( TicTacToe.turn, this.select );
+				}
 			}
+
+		};
+
+		function playAgain(){
+
+			vm.status.gameOver = false;
+			vm.status.message  = undefined;
+			TicTacToe.reset( n );
 		};
 	};
 })();

@@ -4,14 +4,15 @@
 		.module( 'tic-tac-toe' )
 		.factory( 'TicTacToeFactory', TicTacToeFactory );
 
-	function TicTacToeFactory(){
-
-		var turn = 0;
+	function TicTacToeFactory( $timeout ){
 
 		var TicTacToe = function( n ){
 
-			this.grid = [];
-			this.players = [];
+			this.turn            = 0;
+			this.activePlayer    = undefined;
+			this.grid            = [];
+			this.players         = [];
+			this.gameOverMessage = undefined;
 
 			setupGrid( this.grid, n );
 			setupPlayers( this.players );
@@ -19,57 +20,72 @@
 
 		TicTacToe.prototype.select = function( x, y ){
 
-			// Mod 2 will get us the index of the active player to make the selection
-			var playerId = turn % 2;
-
 			this.grid[y][x].selected = true;
-			this.grid[y][x].playerId = playerId;
+			this.grid[y][x].playerId = this.activePlayer;
 		};
 
-		TicTacToe.prototype.checkForWin = function( x, y ){
+		TicTacToe.prototype.isWinner = function( x, y ){
 
-			var playerId = turn % 2;
+			var winner = checkForWin( this.turn, x, y, this.grid );
 
-			// Check for a winner - but only if we should
-			if( turn > 3 ){
+			if( winner ){
 
-				//check row
-				if( checkPath( 'row', x, y, this.grid, playerId ) ){
-
-					return true;
-				}
-
-				if( checkPath( 'col', x, y, this.grid, playerId ) ){
-
-					return true;
-				}
-
-				// Only check diagonal path if it is valid
-				if( (x+y) % 2 === 0 ){
-
-					if( checkPath( 'diagonal', x, y, this.grid, playerId ) ){
-
-						return true;
-					}
-				}
-			};
+				this.gameOverMessage = this.players[ this.activePlayer ].name + ' wins!';
+				return true;
+			}
 
 			return false;
 		};
 
-		TicTacToe.prototype.nextTurn = function(){
+		TicTacToe.prototype.isDraw = function(){
 
-			turn++;
+			var n = this.grid.length;
 
-			if( turn === grid.length * grid.length ){
+			if( this.turn === (n * n) - 1 ){
 
+				this.gameOverMessage = "It's a draw!";
+				return true;
 			}
+
+			return false;
+		};
+
+		TicTacToe.prototype.computerTurn = function( turn, callback ){
+
+			var min = 0,
+				max = 2,
+				x,
+				y,
+				foundValidSelection = false;
+
+			while( !foundValidSelection ){
+
+				x = getRandomInt( min, max );
+				y = getRandomInt( min, max );
+
+				// If not already selected
+				if( !this.grid[y][x].selected ){
+
+					foundValidSelection = true;
+				}
+			}
+
+			//$timeout( function(){
+
+				turn++;
+				callback( x, y );
+			//}, 500);
 		};
 
 		TicTacToe.prototype.updateWins = function(){
 
-			var playerId = turn % 2;
-			this.players[ playerId ].wins++;
+			this.players[ this.activePlayer ].wins++;
+		};
+
+		TicTacToe.prototype.reset = function( n ){
+
+			this.turn = 0;
+			setupGrid( this.grid, n );
 		};
 
 		function setupGrid( grid, n ){
@@ -107,7 +123,38 @@
 			};
 		};
 
-		function checkPath( type, x, y, grid, playerId ){
+		function checkForWin( turn, x, y, grid ){
+
+			// Check for a winner - but only if we should
+			if( turn > 3 ){
+
+				var playerId = turn % 2;
+
+				//check row
+				if( checkPath( 'row', playerId, x, y, grid ) ){
+
+					return true;
+				}
+
+				if( checkPath( 'col', playerId, x, y, grid ) ){
+
+					return true;
+				}
+
+				// Only check diagonal path if it is valid
+				if( (x+y) % 2 === 0 ){
+
+					if( checkPath( 'diagonal', playerId, x, y, grid ) ){
+
+						return true;
+					}
+				}
+			};
+
+			return false;
+		};
+
+		function checkPath( type, playerId, x, y, grid ){
 
 			var matches = 1;
 
@@ -163,8 +210,6 @@
 			}
 			else if( type === 'diagonal' ){
 
-				var matches = 1;
-
 				// Diagonal starting at top left and ending at bottom right
 				if( x === y){
 
@@ -195,20 +240,19 @@
 				// Diagonal starting at bottom left and ending at top right
 				if( x + y === 2 ){
 
-					for( var i=0; i < grid.length; ){
+					var i = 0;
+					while( i < grid.length ){
 
 						for( var j=grid.length-1; j >= 0; j-- ){
 
 							if( i !== x && j !== y ){
 
-								if( !grid[j][i].selected ){
+								if( grid[j][i].selected ){
 
-									break;
-								}
+									if( grid[j][i].playerId === playerId ){
 
-								if( grid[j][i].playerId === playerId ){
-
-									matches++;
+										matches++;
+									}
 								}
 							}
 
@@ -224,6 +268,11 @@
 				}
 			}
 		};
+
+		function getRandomInt( min, max ){
+
+		    return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+		}
 
 		return TicTacToe;
 	};
