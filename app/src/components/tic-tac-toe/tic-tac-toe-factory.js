@@ -6,8 +6,9 @@
 
 	function TicTacToeFactory( $timeout ){
 
-		var TicTacToe = function( n ){
+		var TicTacToe = function( n, playerName, computerName, firstMove ){
 
+			this.n               = n;
 			this.turn            = 0;
 			this.activePlayer    = undefined;
 			this.grid            = [];
@@ -15,7 +16,7 @@
 			this.gameOverMessage = undefined;
 
 			setupGrid( this.grid, n );
-			setupPlayers( this.players );
+			setupPlayers( this.players, playerName, computerName, firstMove );
 		};
 
 		TicTacToe.prototype.select = function( x, y ){
@@ -39,9 +40,7 @@
 
 		TicTacToe.prototype.isDraw = function(){
 
-			var n = this.grid.length;
-
-			if( this.turn === (n * n) - 1 ){
+			if( this.turn === (this.n * this.n) - 1 ){
 
 				this.gameOverMessage = "It's a draw!";
 				return true;
@@ -70,11 +69,11 @@
 				}
 			}
 
-			//$timeout( function(){
+			$timeout( function(){
 
 				turn++;
 				callback( x, y );
-			//}, 500);
+			}, 500);
 		};
 
 		TicTacToe.prototype.updateWins = function(){
@@ -107,30 +106,53 @@
 		};
 
 		// TODO: abstract players into Class
-		function setupPlayers( players ){
+		function setupPlayers( players, playerName, computerName, firstMove ){
 
 			players[0] = {
-
-				name: 'Player',
 				wins: 0,
 				symbol: 'X'
 			};
 
 			players[1] = {
-				name: 'Computer',
 				wins: 0,
 				symbol: 'O'
 			};
+
+			if( firstMove === 0 ){
+
+				players[0].name = playerName;
+				players[1].name = computerName;
+			}
+			else if( firstMove === 1 ){
+
+				players[0].name = computerName;
+				players[1].name = playerName;
+			}
+			else{
+
+				var random = getRandomInt( 0, 999 );
+
+				if( random % 2 === 0 ){
+
+					players[0].name = computerName;
+					players[1].name = playerName;
+				}
+				else{
+
+					players[0].name = playerName;
+					players[1].name = computerName;
+				}
+			}
 		};
 
 		function checkForWin( turn, x, y, grid ){
 
 			// Check for a winner - but only if we should
-			if( turn > 3 ){
+			// TODO: What is the logic to do this dynamically for a grid n*n?
+			//if( turn > 3 ){
 
 				var playerId = turn % 2;
 
-				//check row
 				if( checkPath( 'row', playerId, x, y, grid ) ){
 
 					return true;
@@ -149,7 +171,7 @@
 						return true;
 					}
 				}
-			};
+			//};
 
 			return false;
 		};
@@ -164,22 +186,15 @@
 
 					if( i !== x ){
 
-						// If not selected, no need to continue
-						if( !grid[y][i].selected ){
-
-							break;
-						}
-
-						if( grid[y][i].playerId === playerId ){
+						if( grid[y][i].selected && grid[y][i].playerId === playerId){
 
 							matches++;
 						}
 					}
 				}
 
-				if( matches === 3 ){
+				if( matches === grid.length ){
 
-					// WIN
 					return true;
 				}
 			}
@@ -189,22 +204,15 @@
 
 					if( i !== y ){
 
-						// If not selected, no need to continue
-						if( !grid[i][x].selected ){
-
-							break;
-						}
-
-						if( grid[i][x].playerId === playerId ){
+						if( grid[i][x].selected && grid[i][x].playerId === playerId ){
 
 							matches++;
 						}
 					}
 				}
 
-				if( matches === 3 ){
+				if( matches === grid.length ){
 
-					// WIN
 					return true;
 				}
 			}
@@ -217,19 +225,14 @@
 
 						if( i !== x && i !== y ){
 
-							if( !grid[i][i].selected ){
-
-								break;
-							}
-
-							if( grid[i][i].playerId === playerId ){
+							if( grid[i][i].selected && grid[i][i].playerId === playerId ){
 
 								matches++;
 							}
 						}
 					}
 
-					if( matches === 3 ){
+					if( matches === grid.length ){
 
 						return true;
 					}
@@ -247,21 +250,17 @@
 
 							if( i !== x && j !== y ){
 
-								if( grid[j][i].selected ){
+								if( grid[j][i].selected && grid[j][i].playerId === playerId ){
 
-									if( grid[j][i].playerId === playerId ){
-
-										matches++;
-									}
+									matches++;
 								}
 							}
 
-							// Must control this iterator from within the nested loop
 							i++;
 						}
 					}
 
-					if( matches === 3 ){
+					if( matches === grid.length ){
 
 						return true;
 					}

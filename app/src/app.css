@@ -1,9 +1,19 @@
+.options{
+	position: absolute;
+	right: 25px;
+}
+
 .button:hover{
 	cursor: pointer;
 }
 
 .button:focus{
 	outline: none;
+}
+
+.selected h1{
+	font-size: 4em;
+	font-weight: 400;
 }
 
 .selected:hover{
@@ -13,19 +23,20 @@
 .middle{
 	height: 80%;
 }
+.configuration{
+	padding-top: 128px;
+	position: absolute;
+	width: 100%; height: 100%;
+	z-index: 1;
+	transition: transform .75s ease-out;
+}
 
-// .middle.game-over{
-// 	height: 0;
-// 	transition: height .5s ease-in;
-// }
-
-// .middle.game-over .grid-list{
-// 	opacity: 0;
-// 	transition: opacity .3s ease-out;
-// }
+.configuration.done{
+	transform: translateY(-100%);
+}
 
 .middle .winner{
-	font-size: 2em;
+	font-size: 1.5em;
 	position: absolute;
 	transform: translateY(-100%);
 	width: 100%; height: 100%;
@@ -35,26 +46,28 @@
 
 .middle.game-over .winner{
 	transform: translateY( 0 );
+	transition-delay: 1s;
+}
+
+.middle .grid-list{
+	width: 350px; height: 350px;
 }
 
 .bottom{
 	height: 20%;
 }
 
-// .bottom.game-over{
-// 	height: 100%;
-// 	transition: height .5s ease-in-out;
-// }
+@media( min-width: 768px ){
+	.bottom{
+		justify-content: center;
+	}
 
-// .bottom.game-over div.winner{
-// 	flex: 1 1 50%;
-// 	font-size: 3em;
-// 	max-width: 50%;
-// 	position: absolute;
-// 	transition: font-size .5s ease-in;
-// }
+	.bottom div{
+		max-width: 20% !important;
+	}
+}
 
-// .bottom.game-over div:not(.winner){
-// 	opacity: 0;
-// 	transition: opacity .5s ease-out;
-// }
+.reset{
+	position: absolute;
+	right: 25px;
+}
