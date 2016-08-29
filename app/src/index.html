@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Tic-tac-toe</title>
+
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="description" content="">
+		<meta name="viewport" content="initial-scale=1" />
+
+		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+		<link rel="stylesheet" href="app/src/lib/css/angular-material/angular-material.min.css"/>
+		<link rel="stylesheet" href="app/src/app.css"/>
+	</head>
+	<body ng-app="tic-tac-toe-demo" layout="column" ng-controller="TicTacToeController as vm" ng-cloak>
+
+		<md-toolbar layout="row" layout-align="center center" class="md-tall" md-colors="{background: 'indigo-700'}">
+			<h1>Tic-tac-toe</h1>
+		</md-toolbar>
+
+		<md-content layout="row" layout-align="center center" class="middle" ng-class="{'game-over': vm.status.gameOver}" md-colors="{background: 'indigo-500'}">
+
+			<div layout="column" layout-align="center center" class="winner" ng-class="{'game-over': vm.status.gameOver}" md-colors="{background: 'indigo-300'}">
+
+				<h1>{{vm.status.message}}</h1>
+				<br>
+				<md-button class="md-raised" md-colors="{background: 'indigo-500'}" ng-click="vm.playAgain()">Play Again?</md-button>
+
+			</div>
+
+			<md-grid-list style="height: 350px; width: 350px;" md-cols="3" md-gutter=".5em" md-row-height="fit" md-colors="{background: 'indigo-200'}" class="grid-list">
+
+				<md-grid-tile md-colspan="3" ng-repeat="row in vm.grid">
+
+					<md-grid-list md-cols="3" md-gutter=".5em" md-row-height="fit" layout-fill>
+
+						<md-grid-tile ng-repeat="col in row" md-colors="{background: 'indigo-500'}">
+
+							<div layout-fill ng-if="!col.selected" ng-click="vm.select( col.x, col.y )" class="button"></div>
+							<div layout-align="center center" ng-if="col.selected" class="selected">
+								<h1>{{ vm.players[ col.playerId ].symbol }}</h1>
+							</div>
+
+						</md-grid-tile>
+
+					</md-grid-list>
+
+				</md-grid-tile>
+
+			</md-grid-list>
+
+		</md-content>
+
+		<md-content layout="row" layout-align="center center" md-colors="{background: 'indigo-300'}" class="bottom" ng-class="{'game-over': vm.status.gameOver}">
+
+			<div flex="20" layout="row" layout-align="space-around center" ng-repeat="player in vm.players">
+
+				<h2>{{ player.name }}</h2>
+				<h2>{{ player.wins }}</h2>
+
+			</div>
+
+		</md-content>
+
+		<!-- Libraries -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js"></script>
+		<script>
+			if( !window.angular ){
+				document.write('<script src="/assets/js/angular/angular.min.js"><\/script>');
+				document.write('<script src="/assets/js/angular-animate/angular-animate.min.js"><\/script>');
+				document.write('<script src="/assets/js/angular-aria/angular-aria.min.js"><\/script>');
+				document.write('<script src="/assets/js/angular-material/angular-material.min.js"><\/script>');
+				document.write('<script src="/assets/js/angular-ui-router/angular-ui-router.min.js"><\/script>');
+			}
+		</script>
+
+		<!-- App -->
+		<script src="app/src/app.js"></script>
+		<script src="app/src/app-controller.js"></script>
+
+		<script src="app/src/components/tic-tac-toe/tic-tac-toe.js"></script>
+		<script src="app/src/components/tic-tac-toe/tic-tac-toe-factory.js"></script>
+	</body>
+</html>
