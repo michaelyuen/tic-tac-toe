@@ -8,31 +8,76 @@
 		<meta name="description" content="">
 		<meta name="viewport" content="initial-scale=1" />
 
+		<link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="/assets/img/favicon.ico" type="image/x-icon">
+
 		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
 		<link rel="stylesheet" href="app/src/lib/css/angular-material/angular-material.min.css"/>
 		<link rel="stylesheet" href="app/src/app.css"/>
 	</head>
 	<body ng-app="tic-tac-toe-demo" layout="column" ng-controller="TicTacToeController as vm" ng-cloak>
 
-		<md-toolbar layout="row" layout-align="center center" class="md-tall" md-colors="{background: 'indigo-700'}">
+		<md-toolbar layout="row" layout-align="center center" class="md-tall md-whiteframe-2dp" md-colors="{background: 'indigo-700'}">
 			<h1>Tic-tac-toe</h1>
+
+			<md-button class="md-raised options" md-colors="{background: 'indigo-500'}" ng-show="!vm.optionsVisible" ng-click="vm.toggleOptions()">Options</md-button>
 		</md-toolbar>
+
+		<md-content layout="column" layout-align="space-around center" class="configuration" ng-class="{'done': !vm.optionsVisible}" md-colors="{background: 'indigo-300'}">
+
+			<h2>How many spaces per side?</h2>
+			<md-slider md-discrete ng-model="vm.n" min="3" max="5"></md-slider>
+
+			<h2>Configure the names?</h2>
+			<md-content layour="row" layout-align="center center" md-colors="{background: 'indigo-300'}">
+
+				<md-input-container style="margin-right: 15px;">
+					<label md-colors="{color: 'grey-200'}">Your Name</label>
+					<input type="text" ng-model="vm.playerName" md-colors="{color: 'grey-200'}">
+				</md-input-container>
+
+				<md-input-container style="margin-left: 15px;">
+					<label md-colors="{color: 'grey-200'}">Computer Name</label>
+					<input type="text" ng-model="vm.computerName" md-colors="{color: 'grey-200'}">
+				</md-input-container>
+
+			</md-content>
+
+			<h2>Who should go first?</h2>
+
+			<md-radio-group ng-model="vm.firstMove" layout="row" layout-align="center center">
+
+				<md-radio-button ng-value="0" aria-label="Player">
+					{{vm.playerName}}
+				</md-radio-button>
+				<md-radio-button ng-value="1" aria-label="Computer">
+					{{vm.computerName}}
+				</md-radio-button>
+				<md-radio-button ng-value="2" aria-label="Random">
+					Random
+				</md-radio-button>
+
+			</md-radio-group>
+
+			<md-button class="md-raised" md-colors="{background: 'indigo-500'}" ng-click="vm.initializeGame()">Let's go!</md-button>
+
+		</md-content>
 
 		<md-content layout="row" layout-align="center center" class="middle" ng-class="{'game-over': vm.status.gameOver}" md-colors="{background: 'indigo-500'}">
 
 			<div layout="column" layout-align="center center" class="winner" ng-class="{'game-over': vm.status.gameOver}" md-colors="{background: 'indigo-300'}">
 
 				<h1>{{vm.status.message}}</h1>
-				<br>
+
 				<md-button class="md-raised" md-colors="{background: 'indigo-500'}" ng-click="vm.playAgain()">Play Again?</md-button>
 
 			</div>
 
-			<md-grid-list style="height: 350px; width: 350px;" md-cols="3" md-gutter=".5em" md-row-height="fit" md-colors="{background: 'indigo-200'}" class="grid-list">
+			<md-grid-list md-cols="{{vm.n}}" md-gutter=".5em" md-row-height="fit" md-colors="{background: 'indigo-200'}" class="grid-list">
 
-				<md-grid-tile md-colspan="3" ng-repeat="row in vm.grid">
+				<md-grid-tile md-colspan="{{vm.n}}" ng-repeat="row in vm.grid">
 
-					<md-grid-list md-cols="3" md-gutter=".5em" md-row-height="fit" layout-fill>
+					<md-grid-list md-cols="{{vm.n}}" md-gutter=".5em" md-row-height="fit" layout-fill>
 
 						<md-grid-tile ng-repeat="col in row" md-colors="{background: 'indigo-500'}">
 
@@ -51,14 +96,16 @@
 
 		</md-content>
 
-		<md-content layout="row" layout-align="center center" md-colors="{background: 'indigo-300'}" class="bottom" ng-class="{'game-over': vm.status.gameOver}">
+		<md-content layout="row" layout-align="space-around center" md-colors="{background: 'indigo-300'}" class="bottom" ng-class="{'game-over': vm.status.gameOver}">
 
-			<div flex="20" layout="row" layout-align="space-around center" ng-repeat="player in vm.players">
+			<div flex="50" layout="row" layout-align="space-around center" ng-repeat="player in vm.players">
 
 				<h2>{{ player.name }}</h2>
 				<h2>{{ player.wins }}</h2>
 
 			</div>
+
+			<md-button class="md-raised reset" md-colors="{background: 'indigo-500'}" ng-click="vm.reset()">Reset</md-button>
 
 		</md-content>
 
