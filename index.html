@@ -8,9 +8,9 @@
 		<meta name="description" content="">
 		<meta name="viewport" content="initial-scale=1" />
 
-		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
-		<link rel="stylesheet" href="/lib/css/angular-material/angular-material.min.css"/>
-		<link rel="stylesheet" href="/app.css"/>
+		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+		<link rel="stylesheet" href="app/src/lib/css/angular-material/angular-material.min.css"/>
+		<link rel="stylesheet" href="app/src/app.css"/>
 	</head>
 	<body ng-app="tic-tac-toe-demo" layout="column" ng-controller="TicTacToeController as vm" ng-cloak>
 
@@ -79,15 +79,10 @@
 		</script>
 
 		<!-- App -->
-		<script src="/app.js"></script>
-		<script src="/app-controller.js"></script>
+		<script src="app/src/app.js"></script>
+		<script src="app/src/app-controller.js"></script>
 
-		<script src="/components/tic-tac-toe/tic-tac-toe.js"></script>
-		<script src="/components/tic-tac-toe/tic-tac-toe-factory.js"></script>
-
-		<!-- Result of grunt 'uglify-all' task
-			Minifies and concat all js
-			app.js, components, and views, libraries -->
-		<!-- <script src="/assets/js/uglify-all/all.min.js"></script> -->
+		<script src="app/src/components/tic-tac-toe/tic-tac-toe.js"></script>
+		<script src="app/src/components/tic-tac-toe/tic-tac-toe-factory.js"></script>
 	</body>
 </html>
